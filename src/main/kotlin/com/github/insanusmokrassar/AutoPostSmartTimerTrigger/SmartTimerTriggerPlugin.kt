@@ -19,24 +19,15 @@ private fun nowTime(): DateTime {
 class SmartTimerTriggerPlugin(
     params: IObject<Any>
 ) : Plugin {
-    private val triggerTimes: Queue<DateTime> = params.toObject(
+    private val triggerTimes: List<DateTime> = params.toObject(
         SmartTimerConfig::class.java
-    ).triggerTimes.let {
-        ArrayDeque(it)
-    }
+    ).triggerTimes
 
-    init {
-        val now = nowTime()
-        val first = triggerTimes.peek()
-        while (triggerTimes.peek().isAfter(now)) {
-            triggerTimes.offer(
-                triggerTimes.poll()
-            )
-            if (triggerTimes.peek() == first) {
-                break
-            }
+    private val current: DateTime
+        get() {
+            val now = nowTime()
+            return triggerTimes.first { it.isAfter(now) }
         }
-    }
 
     override fun onInit(bot: TelegramBot, baseConfig: FinalConfig, pluginManager: PluginManager) {
         super.onInit(bot, baseConfig, pluginManager)
@@ -56,12 +47,12 @@ class SmartTimerTriggerPlugin(
 
         launch {
             while (isActive) {
-                val current = triggerTimes.poll()
+                val current = current
 
                 val nowTime = nowTime()
 
                 delay(
-                    current.millis - nowTime.millis
+                    current.millis - nowTime.millis + 1
                 )
 
                 try {
@@ -83,8 +74,6 @@ class SmartTimerTriggerPlugin(
                         e
                     )
                 }
-
-                triggerTimes.offer(current)
             }
         }
     }
