@@ -9,11 +9,36 @@ import com.github.insanusmokrassar.IObjectKRealisations.toObject
 import com.pengrad.telegrambot.TelegramBot
 import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.launch
+import org.joda.time.DateTime
+import java.util.*
+
+private fun nowTime(): DateTime {
+    return DateTime(
+        DateTime.now().millisOfDay()
+    )
+}
 
 class SmartTimerTriggerPlugin(
     params: IObject<Any>
 ) : Plugin {
-    private val config: SmartTimerConfig = params.toObject(SmartTimerConfig::class.java)
+    private val triggerTimes: Queue<DateTime> = params.toObject(
+        SmartTimerConfig::class.java
+    ).triggerTimes.let {
+        ArrayDeque(it)
+    }
+
+    init {
+        val now = nowTime()
+        val first = triggerTimes.peek()
+        while (triggerTimes.peek().isAfter(now)) {
+            triggerTimes.offer(
+                triggerTimes.poll()
+            )
+            if (triggerTimes.peek() == first) {
+                break
+            }
+        }
+    }
 
     override fun onInit(bot: TelegramBot, baseConfig: FinalConfig, pluginManager: PluginManager) {
         super.onInit(bot, baseConfig, pluginManager)
@@ -33,18 +58,15 @@ class SmartTimerTriggerPlugin(
 
         launch {
             while (isActive) {
-                val chosen = config.items.minBy {
-                    it.nextTriggerTime
-                } ?.let {
-                    delay(it.nextTriggerTime.millis)
-                    chooser.triggerChoose()
-                } ?: break
+                val current = triggerTimes.poll()
 
-                chosen.forEach {
-                    launch {
-                        publisher.publishPost(it)
-                    }
-                }
+                val nowTime = nowTime()
+
+                delay(
+                    current.millis - nowTime.millis
+                )
+
+                triggerTimes.offer(current)
             }
         }
     }

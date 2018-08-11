@@ -40,7 +40,7 @@ class SmartTimerConfigTimeItem (
         }
     }
 
-    private val triggerTimes: List<DateTime> by lazy {
+    val triggerTimes: List<DateTime> by lazy {
         timePairs.flatMap {
             it.first.millis until it.second.millis step periodDateTime.millis
         }.map {
