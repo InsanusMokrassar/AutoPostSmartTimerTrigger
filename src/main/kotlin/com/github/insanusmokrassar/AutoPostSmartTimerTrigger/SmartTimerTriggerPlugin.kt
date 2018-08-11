@@ -13,9 +13,7 @@ import org.joda.time.DateTime
 import java.util.*
 
 private fun nowTime(): DateTime {
-    return DateTime(
-        DateTime.now().millisOfDay()
-    )
+    return DateTime.now().millisOfDay().dateTime
 }
 
 class SmartTimerTriggerPlugin(
@@ -65,6 +63,26 @@ class SmartTimerTriggerPlugin(
                 delay(
                     current.millis - nowTime.millis
                 )
+
+                try {
+                    chooser.triggerChoose().forEach {
+                        try {
+                            publisher.publishPost(it)
+                        } catch (e: Exception) {
+                            pluginLogger.throwing(
+                                this@SmartTimerTriggerPlugin::class.java.simpleName,
+                                "trigger publishing",
+                                e
+                            )
+                        }
+                    }
+                } catch (e: Exception) {
+                    pluginLogger.throwing(
+                        this@SmartTimerTriggerPlugin::class.java.simpleName,
+                        "trigger choosing",
+                        e
+                    )
+                }
 
                 triggerTimes.offer(current)
             }
