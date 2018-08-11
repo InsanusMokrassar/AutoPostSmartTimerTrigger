@@ -42,7 +42,7 @@
         <source.version>3.0.1</source.version>
         <jar.version>3.0.2</jar.version>
         <gpg.passphraseServerId>bintray-insanusmokrassar-StandardRepository</gpg.passphraseServerId>
-        <main.class>${project.groupId}.${project.artifactId}.ExampleKt</main.class>
+        <main.class>com.github.insanusmokrassar.AutoPostTelegramBot.LaunchKt</main.class>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
