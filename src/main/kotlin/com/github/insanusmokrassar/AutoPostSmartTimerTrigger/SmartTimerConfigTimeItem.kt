@@ -1,18 +1,7 @@
 package com.github.insanusmokrassar.AutoPostSmartTimerTrigger
 
+import com.github.insanusmokrassar.AutoPostSmartTimerTrigger.utils.*
 import org.joda.time.DateTime
-import org.joda.time.format.DateTimeFormat
-import org.joda.time.format.DateTimeFormatter
-
-private val timeFormat: DateTimeFormatter = DateTimeFormat.forPattern("HH:mm")
-
-private val zeroHour: DateTime by lazy {
-    timeFormat.parseDateTime("00:00")
-}
-
-private val nextDayZeroHour: DateTime by lazy {
-    zeroHour.plusDays(1)
-}
 
 class SmartTimerConfigTimeItem (
     val from: String = timeFormat.print(zeroHour),

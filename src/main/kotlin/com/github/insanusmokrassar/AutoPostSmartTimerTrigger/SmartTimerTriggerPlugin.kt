@@ -23,10 +23,14 @@ class SmartTimerTriggerPlugin(
         SmartTimerConfig::class.java
     ).triggerTimes
 
-    private val current: DateTime
+    private val current: DateTime?
         get() {
             val now = nowTime()
-            return triggerTimes.first { it.isAfter(now) }
+            return triggerTimes.firstOrNull {
+                it.isAfter(now)
+            } ?: (triggerTimes.firstOrNull() ?.also {
+                it.plusDays(1)
+            })
         }
 
     override fun onInit(bot: TelegramBot, baseConfig: FinalConfig, pluginManager: PluginManager) {
@@ -51,9 +55,11 @@ class SmartTimerTriggerPlugin(
 
                 val nowTime = nowTime()
 
-                delay(
-                    current.millis - nowTime.millis + 1
-                )
+                current ?.also {
+                    delay(
+                        it.millis - nowTime.millis + 1
+                    )
+                } ?: break
 
                 try {
                     chooser.triggerChoose().forEach {
