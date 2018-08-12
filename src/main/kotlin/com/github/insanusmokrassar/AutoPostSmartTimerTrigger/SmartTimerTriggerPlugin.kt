@@ -1,5 +1,6 @@
 package com.github.insanusmokrassar.AutoPostSmartTimerTrigger
 
+import com.github.insanusmokrassar.AutoPostSmartTimerTrigger.utils.nowTime
 import com.github.insanusmokrassar.AutoPostTelegramBot.base.models.FinalConfig
 import com.github.insanusmokrassar.AutoPostTelegramBot.base.plugins.*
 import com.github.insanusmokrassar.AutoPostTelegramBot.plugins.choosers.Chooser
@@ -11,10 +12,6 @@ import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.launch
 import org.joda.time.DateTime
 import java.util.*
-
-private fun nowTime(): DateTime {
-    return DateTime.now().millisOfDay().dateTime
-}
 
 class SmartTimerTriggerPlugin(
     params: IObject<Any>
