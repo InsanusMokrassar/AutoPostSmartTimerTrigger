@@ -19,7 +19,7 @@ class SmartTimerConfigTimeItem (
     }
 
     private val timePairs: List<Pair<DateTime, DateTime>> by lazy {
-        if (from > to) {
+        if (from >= to) {
             listOf(
                 zeroHour to toDateTime,
                 fromDateTime to nextDayZeroHour
