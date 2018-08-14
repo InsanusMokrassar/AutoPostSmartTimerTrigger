@@ -19,3 +19,15 @@ fun nowTime(): DateTime {
         timeFormat.print(DateTime.now())
     )
 }
+
+fun List<DateTime>.near(): DateTime? {
+    val now = nowTime()
+
+    return filter {
+        it.isAfter(now)
+    }
+        .sorted()
+        .firstOrNull() ?: (firstOrNull() ?.also {
+        it.plusDays(1)
+    })
+}

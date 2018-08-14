@@ -12,38 +12,24 @@ class SmartTimerConfigTimeItem (
         timeFormat.parseDateTime(from)
     }
     private val toDateTime: DateTime by lazy {
-        timeFormat.parseDateTime(to)
+        timeFormat.parseDateTime(to).let {
+            if (fromDateTime.isAfter(it)) {
+                it.plusDays(1)
+            } else {
+                it
+            }
+        }
     }
+
     private val periodMillis: Long by lazy {
         timeFormat.withZoneUTC().parseDateTime(period).millis
     }
 
-    private val timePairs: List<Pair<DateTime, DateTime>> by lazy {
-        if (from >= to) {
-            listOf(
-                zeroHour to toDateTime,
-                fromDateTime to nextDayZeroHour
-            )
-        } else {
-            listOf(fromDateTime to toDateTime)
-        }
-    }
-
     val triggerTimes: List<DateTime> by lazy {
-        timePairs.flatMap {
-            it.first.millis until it.second.millis step periodMillis
-        }.map {
-            DateTime(it)
+        (fromDateTime.millis until toDateTime.millis step periodMillis).map {
+            DateTime(it).withDayOfYear(1)
         }.sorted()
     }
-
-    val nextTriggerTime: DateTime
-        get() {
-            val now = DateTime.now()
-            return triggerTimes.firstOrNull {
-                it.isAfter(now)
-            } ?: triggerTimes.first()
-        }
 
     override fun toString(): String {
         val stringBuilder = StringBuilder()

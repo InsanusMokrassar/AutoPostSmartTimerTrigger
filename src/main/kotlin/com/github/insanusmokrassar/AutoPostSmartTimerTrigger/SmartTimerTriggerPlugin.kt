@@ -1,5 +1,6 @@
 package com.github.insanusmokrassar.AutoPostSmartTimerTrigger
 
+import com.github.insanusmokrassar.AutoPostSmartTimerTrigger.utils.near
 import com.github.insanusmokrassar.AutoPostSmartTimerTrigger.utils.nowTime
 import com.github.insanusmokrassar.AutoPostTelegramBot.base.models.FinalConfig
 import com.github.insanusmokrassar.AutoPostTelegramBot.base.plugins.*
@@ -20,16 +21,6 @@ class SmartTimerTriggerPlugin(
         SmartTimerConfig::class.java
     ).triggerTimes
 
-    private val current: DateTime?
-        get() {
-            val now = nowTime()
-            return triggerTimes.firstOrNull {
-                it.isAfter(now)
-            } ?: (triggerTimes.firstOrNull() ?.also {
-                it.plusDays(1)
-            })
-        }
-
     override fun onInit(bot: TelegramBot, baseConfig: FinalConfig, pluginManager: PluginManager) {
         super.onInit(bot, baseConfig, pluginManager)
 
@@ -48,7 +39,7 @@ class SmartTimerTriggerPlugin(
 
         launch {
             while (isActive) {
-                val current = current
+                val current = triggerTimes.near()
 
                 val nowTime = nowTime()
 
