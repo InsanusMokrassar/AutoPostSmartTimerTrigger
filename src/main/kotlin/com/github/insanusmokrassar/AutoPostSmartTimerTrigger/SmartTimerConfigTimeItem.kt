@@ -13,7 +13,7 @@ class SmartTimerConfigTimeItem (
     }
     private val toDateTime: DateTime by lazy {
         timeFormat.parseDateTime(to).let {
-            if (fromDateTime.isAfter(it)) {
+            if (fromDateTime.isAfter(it) || fromDateTime.isEqual(it)) {
                 it.plusDays(1)
             } else {
                 it
