@@ -9,3 +9,7 @@
 ## 0.6
 
 * Now you can use equal `from`-`to` pairs to set `24-hour` time cover
+
+## 0.8
+
+* Fixes and improvements
