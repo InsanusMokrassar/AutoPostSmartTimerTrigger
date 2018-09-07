@@ -1,6 +1,7 @@
 package com.github.insanusmokrassar.AutoPostSmartTimerTrigger.utils
 
 import org.joda.time.DateTime
+import org.joda.time.DateTimeZone
 import org.joda.time.format.DateTimeFormat
 import org.joda.time.format.DateTimeFormatter
 
@@ -27,7 +28,6 @@ fun List<DateTime>.near(): DateTime? {
         it.isAfter(now)
     }
         .sorted()
-        .firstOrNull() ?: (sorted().firstOrNull() ?.also {
-        it.plusDays(1)
-    })
+        .firstOrNull()
+        ?: sorted().firstOrNull() ?.plusDays(1)
 }
