@@ -27,7 +27,7 @@ fun List<DateTime>.near(): DateTime? {
         it.isAfter(now)
     }
         .sorted()
-        .firstOrNull() ?: (firstOrNull() ?.also {
+        .firstOrNull() ?: (sorted().firstOrNull() ?.also {
         it.plusDays(1)
     })
 }
