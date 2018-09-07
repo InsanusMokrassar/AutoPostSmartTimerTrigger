@@ -25,13 +25,13 @@ class SmartTimerTriggerPlugin(
         super.onInit(bot, baseConfig, pluginManager)
 
         val chooser = pluginManager.plugins.firstOrNull { it is Chooser } as? Chooser ?:let {
-            pluginLogger.warning(
+            commonLogger.warning(
                 "$name can't be init: chooser is absent"
             )
             return
         }
         val publisher = pluginManager.plugins.firstOrNull { it is Publisher } as? Publisher ?:let {
-            pluginLogger.warning(
+            commonLogger.warning(
                 "$name can't be init: publisher is absent"
             )
             return
@@ -54,7 +54,7 @@ class SmartTimerTriggerPlugin(
                         try {
                             publisher.publishPost(it)
                         } catch (e: Exception) {
-                            pluginLogger.throwing(
+                            commonLogger.throwing(
                                 this@SmartTimerTriggerPlugin::class.java.simpleName,
                                 "trigger publishing",
                                 e
@@ -62,7 +62,7 @@ class SmartTimerTriggerPlugin(
                         }
                     }
                 } catch (e: Exception) {
-                    pluginLogger.throwing(
+                    commonLogger.throwing(
                         this@SmartTimerTriggerPlugin::class.java.simpleName,
                         "trigger choosing",
                         e

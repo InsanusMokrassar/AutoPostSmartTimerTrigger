@@ -13,3 +13,7 @@
 ## 0.8
 
 * Fixes and improvements
+
+## 0.9
+
+* Update of library version
