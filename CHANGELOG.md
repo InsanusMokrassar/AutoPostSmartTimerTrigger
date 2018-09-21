@@ -17,3 +17,7 @@
 ## 0.9
 
 * Update of library version
+
+## 0.10
+
+* AutoPostTelegramBot `0.4.1` -> `0.4.4`
