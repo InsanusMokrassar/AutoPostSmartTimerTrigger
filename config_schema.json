@@ -1,0 +1,36 @@
+{
+  "type": "object",
+  "description": "Contains items for some different times periods. For each object plugin will get period as millis for UTC (without offset) and calculate from time `from` (inclusive) to date `to` (exclusive).",
+  "properties": {
+    "items": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/configTimeItem"
+      }
+    }
+  },
+  "definitions": {
+    "time": {
+      "$id": "time",
+      "type": "string",
+      "pattern": "[0-5][0-9]:[0-5][0-9]"
+    },
+    "configTimeItem": {
+      "type": "object",
+      "properties": {
+        "from": {
+          "$ref": "#/definitions/time",
+          "default": "00:00"
+        },
+        "to": {
+          "$ref": "#/definitions/time",
+          "default": "00:00"
+        },
+        "period": {
+          "$ref": "#/definitions/time",
+          "default": "Default less than 4 seconds"
+        }
+      }
+    }
+  }
+}
