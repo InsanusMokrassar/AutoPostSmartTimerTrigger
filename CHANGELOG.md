@@ -21,3 +21,7 @@
 ## 0.10
 
 * AutoPostTelegramBot `0.4.1` -> `0.4.4`
+
+## 0.11
+
+* AutoPostTelegramBot `0.4.4` -> `0.4.5`
