@@ -4,3 +4,7 @@ out/*
 target
 
 settings.xml
+
+.gradle/
+build/
+out/

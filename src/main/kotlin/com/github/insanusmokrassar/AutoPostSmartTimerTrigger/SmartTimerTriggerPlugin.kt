@@ -6,23 +6,30 @@ import com.github.insanusmokrassar.AutoPostTelegramBot.base.models.FinalConfig
 import com.github.insanusmokrassar.AutoPostTelegramBot.base.plugins.*
 import com.github.insanusmokrassar.AutoPostTelegramBot.plugins.choosers.Chooser
 import com.github.insanusmokrassar.AutoPostTelegramBot.plugins.publishers.Publisher
-import com.github.insanusmokrassar.IObjectK.interfaces.IObject
-import com.github.insanusmokrassar.IObjectKRealisations.toObject
-import com.pengrad.telegrambot.TelegramBot
-import kotlinx.coroutines.experimental.delay
-import kotlinx.coroutines.experimental.launch
+import com.github.insanusmokrassar.AutoPostTelegramBot.utils.NewDefaultCoroutineScope
 import org.joda.time.DateTime
 import java.util.*
+import com.github.insanusmokrassar.TelegramBotAPI.bot.RequestsExecutor
+import kotlinx.coroutines.*
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 
+private val SmartTimerTriggerPluginScope = NewDefaultCoroutineScope(1)
+
+@Serializable
 class SmartTimerTriggerPlugin(
-    params: IObject<Any>
+    private val config: SmartTimerConfig
 ) : Plugin {
-    private val triggerTimes: List<DateTime> = params.toObject(
-        SmartTimerConfig::class.java
-    ).triggerTimes
+    @Transient
+    private val triggerTimes: List<DateTime>
+        get() = config.triggerTimes
 
-    override fun onInit(bot: TelegramBot, baseConfig: FinalConfig, pluginManager: PluginManager) {
-        super.onInit(bot, baseConfig, pluginManager)
+    override suspend fun onInit(
+        executor: RequestsExecutor,
+        baseConfig: FinalConfig,
+        pluginManager: PluginManager
+    ) {
+        super.onInit(executor, baseConfig, pluginManager)
 
         val chooser = pluginManager.plugins.firstOrNull { it is Chooser } as? Chooser ?:let {
             commonLogger.warning(
@@ -37,7 +44,7 @@ class SmartTimerTriggerPlugin(
             return
         }
 
-        launch {
+        SmartTimerTriggerPluginScope.launch {
             while (isActive) {
                 val current = triggerTimes.near()
 

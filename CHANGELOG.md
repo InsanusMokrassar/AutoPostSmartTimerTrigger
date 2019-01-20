@@ -25,3 +25,9 @@
 ## 0.11
 
 * AutoPostTelegramBot `0.4.4` -> `0.4.5`
+
+## 1.0.0
+
+* Update kotlin version
+* Update telegram bot API library
+* Change version of build
