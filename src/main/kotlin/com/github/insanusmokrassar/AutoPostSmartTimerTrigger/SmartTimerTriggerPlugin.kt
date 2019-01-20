@@ -18,11 +18,13 @@ private val SmartTimerTriggerPluginScope = NewDefaultCoroutineScope(1)
 
 @Serializable
 class SmartTimerTriggerPlugin(
-    private val config: SmartTimerConfig
+    @Serializable(SmartTimerConfigTimeItemsSerializer::class)
+    private val items: List<SmartTimerConfigTimeItem>
 ) : Plugin {
     @Transient
-    private val triggerTimes: List<DateTime>
-        get() = config.triggerTimes
+    private val triggerTimes: List<DateTime> by lazy {
+        items.flatMap { it.triggerTimes }
+    }
 
     override suspend fun onInit(
         executor: RequestsExecutor,

@@ -1,8 +1,8 @@
 package com.github.insanusmokrassar.AutoPostSmartTimerTrigger
 
 import com.github.insanusmokrassar.AutoPostSmartTimerTrigger.utils.*
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.Transient
+import kotlinx.serialization.*
+import kotlinx.serialization.internal.ArrayListSerializer
 import org.joda.time.DateTime
 
 @Serializable
@@ -47,3 +47,7 @@ class SmartTimerConfigTimeItem (
         return stringBuilder.toString()
     }
 }
+
+object SmartTimerConfigTimeItemsSerializer : KSerializer<List<SmartTimerConfigTimeItem>> by ArrayListSerializer(
+    SmartTimerConfigTimeItem.serializer()
+)

@@ -31,3 +31,4 @@
 * Update kotlin version
 * Update telegram bot API library
 * Change version of build
+* Now plugin receive direct items
