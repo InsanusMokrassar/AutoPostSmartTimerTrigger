@@ -7,8 +7,11 @@ import org.joda.time.DateTime
 
 @Serializable
 class SmartTimerConfigTimeItem (
+    @Optional
     val from: String = timeFormat.print(zeroHour),
+    @Optional
     val to: String = timeFormat.print(nextDayZeroHour),
+    @Optional
     val period: String = timeFormat.print(3600)
 ) {
     @Transient
