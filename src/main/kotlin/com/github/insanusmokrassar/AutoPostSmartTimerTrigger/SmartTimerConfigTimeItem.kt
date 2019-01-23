@@ -1,16 +1,24 @@
 package com.github.insanusmokrassar.AutoPostSmartTimerTrigger
 
 import com.github.insanusmokrassar.AutoPostSmartTimerTrigger.utils.*
+import kotlinx.serialization.*
+import kotlinx.serialization.internal.ArrayListSerializer
 import org.joda.time.DateTime
 
+@Serializable
 class SmartTimerConfigTimeItem (
+    @Optional
     val from: String = timeFormat.print(zeroHour),
+    @Optional
     val to: String = timeFormat.print(nextDayZeroHour),
+    @Optional
     val period: String = timeFormat.print(3600)
 ) {
+    @Transient
     private val fromDateTime: DateTime by lazy {
         timeFormat.parseDateTime(from)
     }
+    @Transient
     private val toDateTime: DateTime by lazy {
         timeFormat.parseDateTime(to).let {
             if (fromDateTime.isAfter(it) || fromDateTime.isEqual(it)) {
@@ -21,10 +29,12 @@ class SmartTimerConfigTimeItem (
         }
     }
 
+    @Transient
     private val periodMillis: Long by lazy {
         timeFormat.withZoneUTC().parseDateTime(period).millis
     }
 
+    @Transient
     val triggerTimes: List<DateTime> by lazy {
         (fromDateTime.millis until toDateTime.millis step periodMillis).map {
             DateTime(it).withDayOfYear(1)
@@ -40,3 +50,7 @@ class SmartTimerConfigTimeItem (
         return stringBuilder.toString()
     }
 }
+
+object SmartTimerConfigTimeItemsSerializer : KSerializer<List<SmartTimerConfigTimeItem>> by ArrayListSerializer(
+    SmartTimerConfigTimeItem.serializer()
+)
